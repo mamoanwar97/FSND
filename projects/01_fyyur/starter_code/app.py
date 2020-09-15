@@ -109,12 +109,12 @@ def venues():
   areas = db.session.query(Venue.city, Venue.state).distinct(Venue.city, Venue.state)
 
   for area in areas:
-      venues_in_area = db.session.query(Venue.id, Venue.name).filter(
+      area_venues = db.session.query(Venue.id, Venue.name).filter(
           Venue.city == area[0]).filter(Venue.state == area[1])
       data.append({
           "city": area[0],
           "state": area[1],
-          "venues": venues_in_area
+          "venues": area_venues
       })
     
   return render_template('pages/venues.html', areas=data);
