@@ -105,12 +105,18 @@ def index():
 def venues():
   # TODO: replace with real venues data.
   #       num_shows should be aggregated based on number of upcoming shows per venue.
+  data = []
+  areas = db.session.query(Venue.city, Venue.state).distinct(Venue.city, Venue.state)
 
-  data=[{
-    "city": "Worldwide",
-    "state": " ",
-    "venues": Venue.query.all()
-  }]
+  for area in areas:
+      venues_in_area = db.session.query(Venue.id, Venue.name).filter(
+          Venue.city == area[0]).filter(Venue.state == area[1])
+      data.append({
+          "city": area[0],
+          "state": area[1],
+          "venues": venues_in_area
+      })
+    
   return render_template('pages/venues.html', areas=data);
 #Venues.query.order_by('id').all()
 
